@@ -13,4 +13,4 @@ class CallbackHandler(RequestHandler):
             await self.database.register(post, datetime.utcnow())
         else:
             await self.database.update(post, datetime.utcnow())
-        self.write("CALLBACK")
+        self.set_status(204) # NO_CONTENT
