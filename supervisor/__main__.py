@@ -3,6 +3,7 @@ from tornado.web import Application
 from routes import make_routes
 from database import Database
 import argparse
+import os
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "../static"),
