@@ -1,6 +1,6 @@
 import React from 'react';
 import { useListPoll } from './hooks/useListPoll';
-import Default from './devices/Default';
+import Device from './devices/Device';
 
 function App() {
   const items = useListPoll();
@@ -17,7 +17,7 @@ function App() {
       <div className="py-5 bg-light">
         <div className="container">
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {items.map(item => <Default key={item.id}/>)}
+            {items.map(item => <Device key={item.id} message={item}/>)}
           </div>
         </div>
       </div>

@@ -9,5 +9,5 @@ class Blinker(BaseDevice):
     def status(self):
         return {
             **super().status(),
-            'light_is_on': self.state
+            'power': self.state
         }

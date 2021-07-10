@@ -1,4 +1,9 @@
-export type Payload = {};
+export interface UnknownPayload {
+  readonly type: string;
+  readonly [k: string]: any;
+}
+
+export type Payload = UnknownPayload;
 
 export interface Message {
   readonly id: string;

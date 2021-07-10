@@ -3,6 +3,7 @@ from tornado import gen
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest, HTTPError
 
 async def processor(identifier, device_constructor, remote):
+    # TODO: Replace this with a raw TCP socket
     client = AsyncHTTPClient()
     device = device_constructor(identifier)
     while True:
