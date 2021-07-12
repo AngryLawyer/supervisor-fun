@@ -1,18 +1,27 @@
 import React from 'react';
+import { Duration } from 'luxon';
+import humanizeDuration from 'humanize-duration';
+import './baseDevice.scss';
+
+const EXPIRE_TIME = 10;
 
 interface Props {
+  title: string;
   text?: string;
   body?: React.ReactNode;
-  lastMessage: Date;
+  header?: React.ReactNode;
+  timeSinceLastUpdate: Duration;
 }
 
-export default ({text, body}: Props) => {
+export default ({text, body, header, timeSinceLastUpdate, title}: Props) => {
+  const hasExpired = timeSinceLastUpdate.shiftTo('seconds').get('seconds') > EXPIRE_TIME;
+  
   return (
-    <div className="col">
+    <div className={`col base-device ${hasExpired ? 'disconnected' : ''}`}>
       <div className="card shadow-sm">
-        <svg className="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-
+        {header}
         <div className="card-body">
+          <h5>{title}</h5>
           { text && <p className="card-text">{text}</p> }
           { body }
           <div className="d-flex justify-content-between align-items-center">
@@ -20,7 +29,7 @@ export default ({text, body}: Props) => {
               <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
               <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
             </div>
-            <small className="text-muted">9 mins</small>
+            <small className="text-muted">Last updated { humanizeDuration(timeSinceLastUpdate.valueOf(), { round: true }) } ago</small>
           </div>
         </div>
       </div>

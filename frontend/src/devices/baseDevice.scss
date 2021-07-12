@@ -1,0 +1,5 @@
+.base-device {
+  &.disconnected {
+    opacity: 0.25;
+  }
+}
