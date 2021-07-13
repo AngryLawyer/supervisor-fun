@@ -12,7 +12,7 @@ interface Props {
 
 export default ({ message, currentDateTime }: Props) => {
   const timeSinceLastUpdate = Interval.fromDateTimes(DateTime.fromISO(message.last_updated), currentDateTime).toDuration();
-  switch (message.last_payload.type) {
+  switch (message.last_payload.template) {
     case 'light':
       return (
         <Light payload={message.last_payload as LightPayload} message={message} timeSinceLastUpdate={timeSinceLastUpdate} />

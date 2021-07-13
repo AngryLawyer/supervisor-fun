@@ -1,8 +1,10 @@
 from devices.blinker import Blinker
+from devices.water_tank import WaterTank
 
 def get_device(name):
     devices = {
-        'Blinker': Blinker
+        'Blinker': Blinker,
+        'WaterTank': WaterTank
     }
     if name in devices:
         return devices[name]

@@ -1,14 +1,15 @@
 export interface WaterTankPayload {
-  readonly type: 'water_tank';
+  readonly template: 'water_tank';
+  readonly water_level: number;
 }
 
 export interface LightPayload {
-  readonly type: 'light';
+  readonly template: 'light';
   readonly power: boolean;
 }
 
 export interface UnknownPayload {
-  readonly type: string;
+  readonly template: string;
   readonly [k: string]: any;
 }
 
