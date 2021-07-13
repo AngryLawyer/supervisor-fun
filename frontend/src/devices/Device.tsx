@@ -1,8 +1,9 @@
 import React from 'react';
 import { DateTime, Interval } from 'luxon';
-import { LightPayload, Message } from '../types';
+import { LightPayload, WaterTankPayload, Message } from '../types';
 import Default from './Default';
 import Light from './Light';
+import WaterTank from './WaterTank';
 
 interface Props {
   message: Message;
@@ -15,6 +16,10 @@ export default ({ message, currentDateTime }: Props) => {
     case 'light':
       return (
         <Light payload={message.last_payload as LightPayload} message={message} timeSinceLastUpdate={timeSinceLastUpdate} />
+      );
+    case 'water_tank':
+      return (
+        <WaterTank payload={message.last_payload as WaterTankPayload} message={message} timeSinceLastUpdate={timeSinceLastUpdate} />
       );
     default:
       return (

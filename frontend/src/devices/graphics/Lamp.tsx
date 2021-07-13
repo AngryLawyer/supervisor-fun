@@ -7,6 +7,7 @@ interface Props {
   className?: string;
 }
 
+//https://www.flaticon.com/authors/pixel-perfect
 export default ({ width, height, fill, className } : Props) => (
   <svg id="bold" enable-background="new 0 0 24 24" height={height} viewBox="0 0 24 24" width={width} xmlns="http://www.w3.org/2000/svg" className={className}>
     <path fill={fill} d="m12 3.457c-.414 0-.75-.336-.75-.75v-1.957c0-.414.336-.75.75-.75s.75.336.75.75v1.957c0 .414-.336.75-.75.75z"/>
