@@ -2,8 +2,7 @@ import React from 'react';
 import { Duration } from 'luxon';
 import { Message, LightPayload } from '../types';
 import BaseDevice from './BaseDevice';
-import { ReactComponent as Lamp } from './lamp.svg';
-import './lamp.scss';
+import Lamp from './graphics/Lamp';
 
 interface Props {
   payload: LightPayload;
@@ -15,7 +14,7 @@ export default ({ payload, message, timeSinceLastUpdate}: Props) => {
   const lightState = `Light is ${payload.power ? 'On' : 'Off'}`;
   return (
     <BaseDevice
-      header={<Lamp width={320} height={320} className={`bd-placeholder-img card-img-top lamp ${payload.power ? 'on' : 'off'}`}/>}
+      header={<Lamp width={320} height={320} className="bd-placeholder-img card-img-top lamp"  fill={payload.power ? 'red' : 'black'}/>}
       title={message.id}
       text={lightState}
       timeSinceLastUpdate={timeSinceLastUpdate}
