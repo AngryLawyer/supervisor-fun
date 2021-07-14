@@ -6,7 +6,6 @@ from tornado.ioloop import IOLoop
 import json
 
 
-
 class CallbackServer(TCPServer):
     def __init__(self, main_queue):
         super().__init__()
