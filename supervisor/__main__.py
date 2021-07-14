@@ -18,8 +18,8 @@ def main():
     args = parser.parse_args()
 
     async def start():
-        state_handler = StateHandler()
         database = await Database().start()
+        state_handler = StateHandler(database)
         IOLoop.current().add_callback(state_handler.loop)
         app = Application(make_routes(database, state_handler.input_queue), **settings)
         app.listen(args.http_port)
