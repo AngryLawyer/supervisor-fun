@@ -5,6 +5,7 @@ from tornado.ioloop import IOLoop
 
 class CallbackServer(TCPServer):
     async def handle_stream(self, stream, address):
+        # First notify upstream that we've connected
         while True:
             try:
                 data = await stream.read_until(b"\n")

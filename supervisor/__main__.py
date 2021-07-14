@@ -3,6 +3,7 @@ from tornado.web import Application
 from routes import make_routes
 from database import Database
 from callback_server import CallbackServer
+from state_handler import StateHandler
 import argparse
 import os
 
@@ -17,10 +18,12 @@ def main():
     args = parser.parse_args()
 
     async def start():
+        state_handler = StateHandler()
         database = await Database().start()
-        app = Application(make_routes(database), **settings)
+        IOLoop.current().add_callback(state_handler.loop)
+        app = Application(make_routes(database, state_handler.input_queue), **settings)
         app.listen(args.http_port)
-        callback_server = CallbackServer()
+        callback_server = CallbackServer(state_handler.input_queue)
         callback_server.listen(args.tcp_port)
 
     IOLoop.current().add_callback(start)
