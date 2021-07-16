@@ -40,7 +40,8 @@ class ConnectedState(ProcessorState):
         await gen.sleep(5)
 
     async def reader(self):
-        message = await self.socket.read_until('/n')
+        message = await self.socket.read_until(b'\n')
+        print("OOOH", message)
         # TODO: Validation
         await self.device.add_message(json.loads(message))
 

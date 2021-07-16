@@ -21,7 +21,7 @@ def main():
         database = await Database().start()
         state_handler = StateHandler(database)
         IOLoop.current().add_callback(state_handler.loop)
-        app = Application(make_routes(database, state_handler.input_queue), **settings)
+        app = Application(make_routes(database, state_handler.output_queue), **settings)
         app.listen(args.http_port)
         callback_server = CallbackServer(state_handler.input_queue)
         callback_server.listen(args.tcp_port)

@@ -19,7 +19,7 @@ class DrainingState(WaterTankState):
 
     def think(self, water_tank):
         for message in water_tank.drain_queue():
-            if message['id'] == REFILL:
+            if message['action'] == REFILL:
                 return FillingState()
 
         # Water slowly drains from the tank
@@ -33,7 +33,7 @@ class DrainingState(WaterTankState):
 class EmptyState(WaterTankState):
     def think(self, water_tank):
         for message in water_tank.drain_queue():
-            if message['id'] == REFILL:
+            if message['action'] == REFILL:
                 return FillingState()
         return self
 
@@ -58,7 +58,7 @@ class WaterTank(BaseDevice):
         self.state = DrainingState()
 
     async def think(self):
-        self.state.think(self)
+        self.state = self.state.think(self)
 
     def status(self):
         return {

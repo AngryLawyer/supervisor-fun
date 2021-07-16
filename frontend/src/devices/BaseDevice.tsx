@@ -12,10 +12,12 @@ interface Props {
   body?: React.ReactNode;
   header?: React.ReactNode;
   timeSinceLastUpdate: Duration;
+  id: string;
   actions: readonly Action[];
+  sendMessage: (id: string, action: Action) => void;
 }
 
-export default ({text, body, header, timeSinceLastUpdate, title, actions}: Props) => {
+export default ({text, body, header, timeSinceLastUpdate, title, actions, sendMessage, id}: Props) => {
   const hasExpired = timeSinceLastUpdate.shiftTo('seconds').get('seconds') > EXPIRE_TIME;
   
   return (
@@ -29,7 +31,7 @@ export default ({text, body, header, timeSinceLastUpdate, title, actions}: Props
           <div className="d-flex justify-content-between align-items-center">
             <div className="btn-group">
               {actions.map(a => (
-                <button type="button" className="btn btn-sm btn-outline-secondary">{a.label}</button>
+                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => sendMessage(id, a)}>{a.label}</button>
               ))}
             </div>
             <small className="text-muted">Last updated { humanizeDuration(timeSinceLastUpdate.valueOf(), { round: true }) } ago</small>

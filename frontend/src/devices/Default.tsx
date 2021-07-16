@@ -1,15 +1,16 @@
 import React from 'react';
 import { Duration } from 'luxon';
-import { Message, UnknownPayload } from '../types';
+import { Message, UnknownPayload, Action } from '../types';
 import BaseDevice from './BaseDevice';
 
 interface Props {
   payload: UnknownPayload;
   message: Message;
-  timeSinceLastUpdate: Duration
+  timeSinceLastUpdate: Duration;
+  sendMessage: (id: string, action: Action) => void;
 }
 
-export default ({ payload, message, timeSinceLastUpdate}: Props) => {
+export default ({ payload, message, timeSinceLastUpdate, sendMessage}: Props) => {
   const body = (
     <ul>
       {Object.entries(payload).map(([k, v]) => (
@@ -23,6 +24,8 @@ export default ({ payload, message, timeSinceLastUpdate}: Props) => {
       body={body}
       timeSinceLastUpdate={timeSinceLastUpdate}
       actions={payload.actions}
+      sendMessage={sendMessage}
+      id={message.id}
     />
   );
 }

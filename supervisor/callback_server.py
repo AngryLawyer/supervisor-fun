@@ -10,22 +10,23 @@ class CallbackServer(TCPServer):
     def __init__(self, main_queue):
         super().__init__()
         self.main_queue = main_queue
-        self.response_queue = Queue()
-
-    def response_message(self, data):
-        post = json.loads(data)
-        return (post, self.response_queue)
 
     async def handle_stream(self, stream, address):
+        def response_message( data):
+            post = json.loads(data)
+            return (post, response_queue)
+
+        response_queue = Queue()
         async def read_input():
             data = await stream.read_until(b"\n")
             # TODO: Validate it's the shape we expect
-            await self.main_queue.put(self.response_message(data))
+            await self.main_queue.put(response_message(data))
             # await stream.write(data)
 
         async def read_server():
-            data = await self.response_queue.get()
-            print(data)
+            data = await response_queue.get()
+            print("OH NO", data)
+            await stream.write(f"{json.dumps(data)}\n".encode('utf-8'))
 
         pending_input = None
         pending_server = None

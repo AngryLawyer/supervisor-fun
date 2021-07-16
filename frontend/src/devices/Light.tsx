@@ -1,6 +1,6 @@
 import React from 'react';
 import { Duration } from 'luxon';
-import { Message, LightPayload } from '../types';
+import { Message, LightPayload, Action } from '../types';
 import BaseDevice from './BaseDevice';
 import Lamp from './graphics/Lamp';
 
@@ -8,9 +8,10 @@ interface Props {
   payload: LightPayload;
   message: Message;
   timeSinceLastUpdate: Duration
+  sendMessage: (id: string, action: Action) => void;
 }
 
-export default ({ payload, message, timeSinceLastUpdate}: Props) => {
+export default ({ payload, message, timeSinceLastUpdate, sendMessage}: Props) => {
   const lightState = `Light is ${payload.power ? 'On' : 'Off'}`;
   return (
     <BaseDevice
@@ -19,6 +20,8 @@ export default ({ payload, message, timeSinceLastUpdate}: Props) => {
       text={lightState}
       timeSinceLastUpdate={timeSinceLastUpdate}
       actions={payload.actions}
+      sendMessage={sendMessage}
+      id={message.id}
     />
   );
 }

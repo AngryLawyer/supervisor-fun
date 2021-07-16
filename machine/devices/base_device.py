@@ -15,8 +15,9 @@ class BaseDevice:
     def drain_queue(self):
         messages = []
         try:
-            for item in self.messages.get_nowait():
-                messages.push(item)
+            while True:
+                item = self.messages.get_nowait()
+                messages.append(item)
         except QueueEmpty:
             pass
         return messages
