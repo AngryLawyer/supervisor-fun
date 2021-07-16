@@ -1,5 +1,5 @@
-* Switch comms from devices to being TCP
-* Command sending
+* Update Usage
+* Refactor queue handling
 * Unit testing
 * Cleanup
 * Documentation
