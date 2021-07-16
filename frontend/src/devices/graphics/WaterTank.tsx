@@ -12,7 +12,7 @@ const WATER_MAX_HEIGHT = 86;
 
 //https://www.flaticon.com/authors/good-ware
 export default ({ width, height, className, waterLevel }: Props) => {
-  const waterHeight = WATER_MAX_HEIGHT * waterLevel;
+  const waterHeight = WATER_MAX_HEIGHT * (waterLevel / 100);
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 128 128" className={className}>
       <rect width="72" height={waterHeight} fill="blue" x="28" y={WATER_Y_OFFSET + (WATER_MAX_HEIGHT - (waterHeight))}></rect>

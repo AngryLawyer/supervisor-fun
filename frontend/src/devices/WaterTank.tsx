@@ -16,6 +16,7 @@ export default ({ payload, message, timeSinceLastUpdate}: Props) => {
       header={<WaterTankSVG width={320} height={320} className="bd-placeholder-img card-img-top" waterLevel={payload.water_level}/>}
       title={message.id}
       timeSinceLastUpdate={timeSinceLastUpdate}
+      actions={payload.actions}
     />
   );
 }

@@ -22,6 +22,7 @@ export default ({ payload, message, timeSinceLastUpdate}: Props) => {
       title={message.id}
       body={body}
       timeSinceLastUpdate={timeSinceLastUpdate}
+      actions={payload.actions}
     />
   );
 }

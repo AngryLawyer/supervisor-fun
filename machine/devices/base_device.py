@@ -1,4 +1,4 @@
-from asyncio import Queue
+from asyncio import Queue, QueueEmpty
 
 class BaseDevice:
     def __init__(self, identifier):
@@ -12,8 +12,21 @@ class BaseDevice:
     async def think(self):
         raise NotImplementedError()
 
+    def drain_queue(self):
+        messages = []
+        try:
+            for item in self.messages.get_nowait():
+                messages.push(item)
+        except QueueEmpty:
+            pass
+        return messages
+
+    def actions(self):
+        return []
+
     def status(self):
         return {
             'id': self.identifier,
             'template': self.template,
+            'actions': self.actions(),
         }

@@ -18,6 +18,7 @@ export default ({ payload, message, timeSinceLastUpdate}: Props) => {
       title={message.id}
       text={lightState}
       timeSinceLastUpdate={timeSinceLastUpdate}
+      actions={payload.actions}
     />
   );
 }
