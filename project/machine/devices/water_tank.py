@@ -1,3 +1,4 @@
+from tornado import gen
 from machine.devices.base_device import BaseDevice
 from machine.actions import action
 from random import randint
@@ -10,6 +11,7 @@ class WaterTankState:
 
     async def think(self, water_tank):
         raise NotImplementedError()
+
 
 class DrainingState(WaterTankState):
     def __init__(self):
@@ -59,6 +61,7 @@ class WaterTank(BaseDevice):
 
     async def think(self):
         self.state = self.state.think(self)
+        await gen.sleep(5)
 
     def status(self):
         return {

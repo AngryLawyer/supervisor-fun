@@ -42,4 +42,8 @@ class CallbackServer(TCPServer):
         })
 
         while True:
-            await concurrent.process()
+            try:
+                await concurrent.process()
+            except Exception as e:
+                print(f"Exiting callback: {e}")
+                return

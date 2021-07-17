@@ -12,8 +12,8 @@ class StateHandler:
     def __init__(self, database):
         self._database = database
         self._handlers = {}
-        self._input_queue = Queue()
-        self._output_queue = Queue()
+        self.input_queue = Queue()
+        self.output_queue = Queue()
 
     async def _read_from_tcp(self):
         """
@@ -22,7 +22,7 @@ class StateHandler:
         This updates the database and stores the queues that
         each TCP link gives them
         """
-        (payload, reply) = await self._input_queue.get()
+        (payload, reply) = await self.input_queue.get()
         if not await self._database.machine_exists(payload['id']):
             await self._database.register(payload, datetime.utcnow())
         else:
@@ -34,7 +34,7 @@ class StateHandler:
         A task that listens for messages to send to specific handlers
         """
 
-        payload = await self._output_queue.get()
+        payload = await self.output_queue.get()
         handler = self._handlers.get(payload['id'], None)
         if handler:
             await handler.put(payload)

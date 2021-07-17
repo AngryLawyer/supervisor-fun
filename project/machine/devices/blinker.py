@@ -1,3 +1,4 @@
+from tornado import gen
 from machine.devices.base_device import BaseDevice
 
 class Blinker(BaseDevice):
@@ -7,8 +8,11 @@ class Blinker(BaseDevice):
         super().__init__(identifier)
         self.template = 'light'
 
+
     async def think(self):
         self.state = not self.state
+        await gen.sleep(5)
+
 
     def status(self):
         return {

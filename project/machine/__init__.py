@@ -13,6 +13,10 @@ def add_machine_subparser(subparsers):
 
 
 def main(args):
+    """
+    Start up an individual machine that will try to connect to the Supervisor
+    """
+
     device = get_device(args.device_type)
 
     async def callback():
