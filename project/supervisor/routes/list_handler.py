@@ -2,7 +2,13 @@ from tornado.web import RequestHandler
 from datetime import datetime
 import json
 
+
 class ListHandler(RequestHandler):
+    """
+    Return a list of JSON-formatted Machines
+    that have registered with the Supervisor
+    """
+
     def initialize(self, database):
         self.database = database
 

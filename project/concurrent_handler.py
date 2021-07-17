@@ -41,7 +41,7 @@ class ConcurrentHandler:
         ]
         if len(exceptions) > 0:
             [item.cancel() for item in pending]
-            raise Exception(f"Tasks failed - {exceptions}")
+            raise Exception(f"Tasks failed - {exceptions}", exceptions)
 
         # Get our existing messages ready to requeue
         for item in pending:

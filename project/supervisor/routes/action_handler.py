@@ -3,7 +3,13 @@ from tornado.escape import url_unescape
 from datetime import datetime
 import json
 
+
 class ActionHandler(RequestHandler):
+    """
+    Handle the frontend sending commands to
+    an individual Machine
+    """
+
     def initialize(self, queue):
         self.queue = queue
 

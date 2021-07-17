@@ -8,7 +8,7 @@ import argparse
 import os
 
 settings = {
-    "static_path": os.path.join(os.path.dirname(__file__), "../static"),
+    "static_path": os.path.join(os.path.dirname(__file__), "../../static"),
 }
 
 
@@ -17,16 +17,21 @@ def add_supervisor_subparser(subparsers):
     parser.add_argument('http_port', type=int, help='Which port to listen on for HTTP')
     parser.add_argument('tcp_port', type=int, help='Which port to listen on for direct TCP')
     parser.set_defaults(func=main)
+
  
 def main(args):
+    """
+    Start up the supervisor, including webserver and TCP handler
+    """
+
     async def start():
         database = await Database().start()
         state_handler = StateHandler(database)
-        IOLoop.current().add_callback(state_handler.loop)
         app = Application(make_routes(database, state_handler.output_queue), **settings)
         app.listen(args.http_port)
         callback_server = CallbackServer(state_handler.input_queue)
         callback_server.listen(args.tcp_port)
+        await state_handler.loop()
 
     IOLoop.current().add_callback(start)
     IOLoop.current().start()
