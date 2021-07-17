@@ -53,7 +53,7 @@ class ConnectedState(ProcessorState):
     async def think(self):
         try:
             await self.concurrent.process()
-        except ex:
+        except Exception as ex:
             print(f"Disconnecting due to {ex}")
             return WaitingForConnectionState(self.remote, self.port, None, self.device)
         return self

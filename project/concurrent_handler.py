@@ -30,20 +30,22 @@ class ConcurrentHandler:
             existing_task if existing_task is not None else create_task(self._tasks[name](), name=name)
             for (name, existing_task)
             in self._pending.items()
-        ])
+        ], return_when=FIRST_COMPLETED)
 
-        self._pending = {key: None for key in tasks.keys()}
+        self._pending = {key: None for key in self._tasks.keys()}
 
         # If one of our tasks has an exception, we probably want to re-raise it
-        for item in done:
-            ex = item.exception()
-            if ex:
-                [item.cancel() for item in pending]
-                raise ex
+        exceptions = [
+            (item, ex) for (item, ex) in [(item.get_name(), item.exception()) for item in done]
+            if ex is not None
+        ]
+        if len(exceptions) > 0:
+            [item.cancel() for item in pending]
+            raise Exception(f"Tasks failed - {exceptions}")
 
         # Get our existing messages ready to requeue
         for item in pending:
             self._pending = {
-                **self.pending,
-                [item.get_name()]: item
+                **self._pending,
+                item.get_name(): item
             }
