@@ -1,4 +1,4 @@
-from devices.base_device import BaseDevice
+from machine.devices.base_device import BaseDevice
 
 class Blinker(BaseDevice):
     state = False

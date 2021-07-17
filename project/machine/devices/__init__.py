@@ -1,5 +1,5 @@
-from devices.blinker import Blinker
-from devices.water_tank import WaterTank
+from machine.devices.blinker import Blinker
+from machine.devices.water_tank import WaterTank
 
 def get_device(name):
     devices = {

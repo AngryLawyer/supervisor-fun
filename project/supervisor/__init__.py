@@ -1,22 +1,24 @@
 from tornado.ioloop import IOLoop
 from tornado.web import Application
-from routes import make_routes
-from database import Database
-from callback_server import CallbackServer
-from state_handler import StateHandler
+from supervisor.routes import make_routes
+from supervisor.database import Database
+from supervisor.callback_server import CallbackServer
+from supervisor.state_handler import StateHandler
 import argparse
 import os
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "../static"),
 }
- 
-def main():
-    parser = argparse.ArgumentParser(description='Start a Supervisor')
+
+
+def add_supervisor_subparser(subparsers):
+    parser = subparsers.add_parser(name="supervisor", description="Start a supervisor")
     parser.add_argument('http_port', type=int, help='Which port to listen on for HTTP')
     parser.add_argument('tcp_port', type=int, help='Which port to listen on for direct TCP')
-    args = parser.parse_args()
-
+    parser.set_defaults(func=main)
+ 
+def main():
     async def start():
         database = await Database().start()
         state_handler = StateHandler(database)
@@ -28,6 +30,3 @@ def main():
 
     IOLoop.current().add_callback(start)
     IOLoop.current().start()
-
-if __name__ == "__main__":
-    main()

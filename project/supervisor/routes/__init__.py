@@ -1,6 +1,6 @@
-from routes.main_handler import MainHandler
-from routes.list_handler import ListHandler
-from routes.action_handler import ActionHandler
+from supervisor.routes.main_handler import MainHandler
+from supervisor.routes.list_handler import ListHandler
+from supervisor.routes.action_handler import ActionHandler
 
 def make_routes(database, main_queue):
     return [

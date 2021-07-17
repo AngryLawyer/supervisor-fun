@@ -1,5 +1,5 @@
-from devices.base_device import BaseDevice
-from actions import action
+from machine.devices.base_device import BaseDevice
+from machine.actions import action
 from random import randint
 
 REFILL = 'refill'
