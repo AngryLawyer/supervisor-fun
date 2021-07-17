@@ -18,7 +18,7 @@ def add_supervisor_subparser(subparsers):
     parser.add_argument('tcp_port', type=int, help='Which port to listen on for direct TCP')
     parser.set_defaults(func=main)
  
-def main():
+def main(args):
     async def start():
         database = await Database().start()
         state_handler = StateHandler(database)

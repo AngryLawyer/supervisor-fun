@@ -1,4 +1,5 @@
 from asyncio import Queue, wait, FIRST_COMPLETED, create_task
+from concurrent_handler import ConcurrentHandler
 from tornado.tcpserver import TCPServer
 from tornado.iostream import StreamClosedError
 from tornado import gen
@@ -28,24 +29,10 @@ class CallbackServer(TCPServer):
             print("OH NO", data)
             await stream.write(f"{json.dumps(data)}\n".encode('utf-8'))
 
-        pending_input = None
-        pending_server = None
+        concurrent = ConcurrentHandler({
+            "input": read_input,
+            "server": read_server
+        })
 
         while True:
-            pending_input = None
-            pending_server = None
-            (done, pending) = await wait([pending_input if pending_input is not None else create_task(read_input(), name="input"), pending_server if pending_server else create_task(read_server(), name="server")], return_when=FIRST_COMPLETED)
-            # If one of our tasks has an exception, we probably want to stop
-            for item in done:
-                ex = item.exception()
-                if ex:
-                    print(f"Exiting callback due to {ex}")
-                    return
-
-            # Get our existing messages ready to requeue
-            for item in pending:
-                name = item.get_name()
-                if name == "input":
-                    pending_input = item
-                elif name == "server":
-                    pending_server = item
+            await concurrent.process()
