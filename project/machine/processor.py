@@ -10,8 +10,9 @@ class ProcessorState:
     """
     Base class for a FSM handling the processor's connection
     """
+
     def __init__(self, remote, port, socket, device):
-        print(f'ProcessorState {self.__class__.__name__}')
+        print(f"ProcessorState {self.__class__.__name__}")
         self.remote = remote
         self.port = port
         self.socket = socket
@@ -27,13 +28,14 @@ class WaitingForConnectionState(ProcessorState):
 
     This state will retry every 5 seconds to form a connection
     """
+
     async def think(self):
         client = TCPClient()
         try:
             socket = await client.connect(self.remote, self.port)
             return ConnectedState(self.remote, self.port, socket, self.device)
         except (TimeoutError, ConnectionError, StreamClosedError) as e:
-            print(f'Failed to phone home - {e}')
+            print(f"Failed to phone home - {e}")
         await gen.sleep(5)
         return self
 
@@ -47,17 +49,16 @@ class ConnectedState(ProcessorState):
 
     def __init__(self, remote, port, socket, device):
         super().__init__(remote, port, socket, device)
-        self.concurrent = ConcurrentHandler({
-            "responder": self.responder,
-            "reader": self.reader
-        })
+        self.concurrent = ConcurrentHandler(
+            {"responder": self.responder, "reader": self.reader}
+        )
 
     async def responder(self):
-        self.socket.write(f'{json.dumps(self.device.status())}\n'.encode('utf-8'))
+        self.socket.write(f"{json.dumps(self.device.status())}\n".encode("utf-8"))
         await gen.sleep(5)
 
     async def reader(self):
-        message = await self.socket.read_until(b'\n')
+        message = await self.socket.read_until(b"\n")
         print("OOOH", message)
         # TODO: Validation
         await self.device.add_message(json.loads(message))
@@ -92,10 +93,9 @@ async def processor(identifier, device_constructor, remote, port):
         while True:
             await device.think()
 
-    concurrent = ConcurrentHandler({
-        "connection": connection,
-        "device_task": device_task
-    })
+    concurrent = ConcurrentHandler(
+        {"connection": connection, "device_task": device_task}
+    )
 
     while True:
         await concurrent.process()

@@ -16,8 +16,5 @@ class ActionHandler(RequestHandler):
     async def post(self, service_name):
         # TODO: Validate the message
         body = json.loads(self.request.body)
-        await self.queue.put({
-            **body,
-            'id': url_unescape(service_name)
-        })
-        self.set_status(204) # NO CONTENT
+        await self.queue.put({**body, "id": url_unescape(service_name)})
+        self.set_status(204)  # NO CONTENT

@@ -1,5 +1,6 @@
 from asyncio import Queue, QueueEmpty
 
+
 class BaseDevice:
     """
     Base class for each Device simulator
@@ -47,13 +48,13 @@ class BaseDevice:
     def status(self):
         """
         Return basic information about this Device
-        
+
         Derived classes should add their own information
         to this object
         """
 
         return {
-            'id': self.identifier,
-            'template': self._template,
-            'actions': self._actions(),
+            "id": self.identifier,
+            "template": self._template,
+            "actions": self._actions(),
         }

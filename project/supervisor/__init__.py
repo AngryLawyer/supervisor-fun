@@ -14,11 +14,13 @@ settings = {
 
 def add_supervisor_subparser(subparsers):
     parser = subparsers.add_parser(name="supervisor", description="Start a supervisor")
-    parser.add_argument('http_port', type=int, help='Which port to listen on for HTTP')
-    parser.add_argument('tcp_port', type=int, help='Which port to listen on for direct TCP')
+    parser.add_argument("http_port", type=int, help="Which port to listen on for HTTP")
+    parser.add_argument(
+        "tcp_port", type=int, help="Which port to listen on for direct TCP"
+    )
     parser.set_defaults(func=main)
 
- 
+
 def main(args):
     """
     Start up the supervisor, including webserver and TCP handler

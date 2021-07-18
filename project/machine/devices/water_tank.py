@@ -3,7 +3,8 @@ from machine.devices.base_device import BaseDevice
 from machine.actions import action
 from random import randint
 
-REFILL = 'refill'
+REFILL = "refill"
+
 
 class WaterTankState:
     """
@@ -11,7 +12,7 @@ class WaterTankState:
     """
 
     def __init__(self):
-        print(f'Water Tank State {self.__class__.__name__}')
+        print(f"Water Tank State {self.__class__.__name__}")
 
     async def think(self, water_tank):
         raise NotImplementedError()
@@ -30,7 +31,7 @@ class DrainingState(WaterTankState):
 
     def think(self, water_tank):
         for message in water_tank.drain_queue():
-            if message['action'] == REFILL:
+            if message["action"] == REFILL:
                 return FillingState()
 
         # Water slowly drains from the tank
@@ -48,7 +49,7 @@ class EmptyState(WaterTankState):
 
     def think(self, water_tank):
         for message in water_tank.drain_queue():
-            if message['action'] == REFILL:
+            if message["action"] == REFILL:
                 return FillingState()
         return self
 
@@ -59,7 +60,7 @@ class FillingState(WaterTankState):
     """
 
     def think(self, water_tank):
-        water_tank.drain_queue() # Discard all messages, you can't do anything while filling
+        water_tank.drain_queue()  # Discard all messages, you can't do anything while filling
 
         # Water refills much quicker
         if water_tank.water_level < 100:
@@ -78,9 +79,10 @@ class WaterTank(BaseDevice):
     The water level can be refilled by sending it
     a REFILL message
     """
+
     def __init__(self, identifier):
         super().__init__(identifier)
-        self.template = 'water_tank'
+        self.template = "water_tank"
         self.water_level = 100
         self.state = DrainingState()
 
@@ -96,8 +98,5 @@ class WaterTank(BaseDevice):
 
     def actions(self):
         if self.state.__class__ != FillingState:
-            return [
-                *super().actions(),
-                action(REFILL, "Refill")
-            ]
+            return [*super().actions(), action(REFILL, "Refill")]
         return super().actions()

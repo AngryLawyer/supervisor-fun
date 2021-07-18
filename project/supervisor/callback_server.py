@@ -34,12 +34,9 @@ class CallbackServer(TCPServer):
 
         async def read_server():
             data = await response_queue.get()
-            await stream.write(f"{json.dumps(data)}\n".encode('utf-8'))
+            await stream.write(f"{json.dumps(data)}\n".encode("utf-8"))
 
-        concurrent = ConcurrentHandler({
-            "input": read_input,
-            "server": read_server
-        })
+        concurrent = ConcurrentHandler({"input": read_input, "server": read_server})
 
         while True:
             try:

@@ -10,8 +10,10 @@ def main():
     Parses command line arguments and delegates them to the relevant subparser
     """
 
-    parser = argparse.ArgumentParser(description='Start part of the Supervisor project')
-    subparsers = parser.add_subparsers(title='Programs', required=True, help="Which program to invoke", dest="program")
+    parser = argparse.ArgumentParser(description="Start part of the Supervisor project")
+    subparsers = parser.add_subparsers(
+        title="Programs", required=True, help="Which program to invoke", dest="program"
+    )
     add_machine_subparser(subparsers)
     add_supervisor_subparser(subparsers)
     args = parser.parse_args()
