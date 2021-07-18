@@ -1,7 +1,13 @@
 from tornado import gen
 from machine.devices.base_device import BaseDevice
 
+
 class Blinker(BaseDevice):
+    """
+    A simple light that toggles on and off
+    every 5 seconds
+    """
+
     state = False
 
     def __init__(self, identifier):

@@ -6,6 +6,10 @@ from random import randint
 REFILL = 'refill'
 
 class WaterTankState:
+    """
+    FSM to track what state the water tank is in
+    """
+
     def __init__(self):
         print(f'Water Tank State {self.__class__.__name__}')
 
@@ -14,6 +18,11 @@ class WaterTankState:
 
 
 class DrainingState(WaterTankState):
+    """
+    The water tank has water, and is currently
+    draining at a randomly specified speed
+    """
+
     def __init__(self):
         # Randomly pick a demand level
         super().__init__()
@@ -33,6 +42,10 @@ class DrainingState(WaterTankState):
 
 
 class EmptyState(WaterTankState):
+    """
+    The water tank is empty
+    """
+
     def think(self, water_tank):
         for message in water_tank.drain_queue():
             if message['action'] == REFILL:
@@ -41,6 +54,10 @@ class EmptyState(WaterTankState):
 
 
 class FillingState(WaterTankState):
+    """
+    The water tank is currently filling
+    """
+
     def think(self, water_tank):
         water_tank.drain_queue() # Discard all messages, you can't do anything while filling
 
@@ -53,6 +70,14 @@ class FillingState(WaterTankState):
 
 
 class WaterTank(BaseDevice):
+    """
+    A simulated water tank.
+
+    Water will drain from the tank at a randomly
+    determined speed, until empty.
+    The water level can be refilled by sending it
+    a REFILL message
+    """
     def __init__(self, identifier):
         super().__init__(identifier)
         self.template = 'water_tank'
