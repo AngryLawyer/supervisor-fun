@@ -23,19 +23,20 @@ The project exists in multiple distinct parts: individual MACHINE nodes, and a S
 You can start up MACHINES like so
 
 ```bash
-./env/bin/python3 machine [unique identifier] [machine type] [URL of supervisor]
+./env/bin/python3 ./project machine [unique identifier] [machine type] [IP address/url of supervisor] [port number]
 ```
 
 They'll begin doing their thing and reporting back to the supervisor. The currently available types are:
 
 * Blinker - simulate a blinking light
+* WaterTank - simulate a tank of water that slowly drains
 
 To start up a SUPERVISOR, do the following
 
 ```bash
-./env/bin/python3 supervisor [port]
+./env/bin/python3 ./project supervisor [http_port] [machine_tcp_port]
 ```
 
 You'll want to make the port the same as the ones the MACHINES are calling back to.
 
-A dashboard will become available on `http://localhost:[port]` - you can watch as the machines dial home and register with the dashboard.
+A dashboard will become available on `http://localhost:[http_port]` - you can watch as the machines dial home and register with the dashboard.
