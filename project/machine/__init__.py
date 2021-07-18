@@ -1,6 +1,9 @@
 from tornado.ioloop import IOLoop
 from machine.processor import processor
 from machine.devices import get_device
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def add_machine_subparser(subparsers):
@@ -22,6 +25,7 @@ def main(args):
     device = get_device(args.device_type)
 
     async def callback():
+        logger.info(f"Starting Machine with device {device.__class__.__name__}")
         await processor(args.identifier, device, args.target, args.port)
 
     IOLoop.current().run_sync(callback)

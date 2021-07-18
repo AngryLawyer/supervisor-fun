@@ -1,5 +1,6 @@
 from tornado import gen
 from machine.devices.base_device import BaseDevice
+import logging
 
 
 class Blinker(BaseDevice):
@@ -15,6 +16,7 @@ class Blinker(BaseDevice):
         self.template = "light"
 
     async def think(self):
+        logging.info(f"Toggling light from {self.state} to {not self.state}")
         self.state = not self.state
         await gen.sleep(5)
 

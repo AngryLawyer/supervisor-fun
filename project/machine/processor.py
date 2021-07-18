@@ -7,6 +7,8 @@ from tornado.iostream import StreamClosedError
 from concurrent_handler import ConcurrentHandler
 from validation import ValidationException, ActionValidation
 
+logger = logging.getLogger(__name__)
+
 
 class ProcessorState:
     """
@@ -14,7 +16,7 @@ class ProcessorState:
     """
 
     def __init__(self, remote, port, socket, device):
-        logging.info(f"ProcessorState {self.__class__.__name__}")
+        logger.info(f"ProcessorState {self.__class__.__name__}")
         self.remote = remote
         self.port = port
         self.socket = socket
@@ -37,7 +39,7 @@ class WaitingForConnectionState(ProcessorState):
             socket = await client.connect(self.remote, self.port)
             return ConnectedState(self.remote, self.port, socket, self.device)
         except (TimeoutError, ConnectionError, StreamClosedError) as e:
-            logging.info(f"Failed to phone home - {e}")
+            logger.info(f"Failed to phone home - {e}")
         await gen.sleep(5)
         return self
 
@@ -65,7 +67,8 @@ class ConnectedState(ProcessorState):
         try:
             data = json.loads(message)
             validator.validate(data)
-            await self.device.add_message(json.loads(message))
+            logger.info(f"Received valid message {data}")
+            await self.device.add_message(data)
         except json.JSONDecodeError as e:
             logger.warn(f"Got malformed message {message} from Supervisor - {e}")
         except ValidationException as e:
@@ -76,7 +79,7 @@ class ConnectedState(ProcessorState):
         try:
             await self.concurrent.process()
         except Exception as ex:
-            logging.info(f"Disconnecting due to {ex}")
+            logger.info(f"Disconnecting due to {ex}")
             return WaitingForConnectionState(self.remote, self.port, None, self.device)
         return self
 

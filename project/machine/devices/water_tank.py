@@ -2,6 +2,10 @@ from tornado import gen
 from machine.devices.base_device import BaseDevice
 from machine.actions import action
 from random import randint
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 REFILL = "refill"
 
@@ -12,7 +16,7 @@ class WaterTankState:
     """
 
     def __init__(self):
-        print(f"Water Tank State {self.__class__.__name__}")
+        logger.info(f"Water Tank State {self.__class__.__name__}")
 
     async def think(self, water_tank):
         raise NotImplementedError()
@@ -28,6 +32,7 @@ class DrainingState(WaterTankState):
         # Randomly pick a demand level
         super().__init__()
         self.demand_level = randint(1, 10)
+        logger.info(f"Water demand is {self.demand_level} units every 5 seconds")
 
     def think(self, water_tank):
         for message in water_tank.drain_queue():
@@ -37,6 +42,7 @@ class DrainingState(WaterTankState):
         # Water slowly drains from the tank
         if water_tank.water_level > 0:
             water_tank.water_level = max(water_tank.water_level - self.demand_level, 0)
+            logger.info(f"Water level drained to {water_tank.water_level}")
         else:
             return EmptyState()
         return self
@@ -65,6 +71,7 @@ class FillingState(WaterTankState):
         # Water refills much quicker
         if water_tank.water_level < 100:
             water_tank.water_level = min(water_tank.water_level + 10, 100)
+            logger.info(f"Water level filled to {water_tank.water_level}")
         else:
             return DrainingState()
         return self
