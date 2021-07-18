@@ -4,13 +4,13 @@ export interface Action {
 }
 
 export interface WaterTankPayload {
-  readonly template: 'water_tank';
+  readonly template: "water_tank";
   readonly water_level: number;
   readonly actions: readonly Action[];
 }
 
 export interface LightPayload {
-  readonly template: 'light';
+  readonly template: "light";
   readonly power: boolean;
   readonly actions: readonly Action[];
 }

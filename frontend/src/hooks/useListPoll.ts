@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState } from 'react';
-import { Message } from '../types';
+import { useRef, useEffect, useState } from "react";
+import { Message } from "../types";
 
 export const useListPoll = () => {
   const intervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -7,7 +7,7 @@ export const useListPoll = () => {
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      fetch('/list')
+      fetch("/list")
         .then((response) => response.json())
         .then(setState);
     }, 1000);
@@ -17,4 +17,4 @@ export const useListPoll = () => {
   }, [setState]);
 
   return state;
-}
+};
