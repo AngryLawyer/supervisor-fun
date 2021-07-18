@@ -40,3 +40,23 @@ To start up a SUPERVISOR, do the following
 You'll want to make the port the same as the ones the MACHINES are calling back to.
 
 A dashboard will become available on `http://localhost:[http_port]` - you can watch as the machines dial home and register with the dashboard.
+
+Running tests
+-----
+
+You can run the unit tests for the Python components here:
+
+```bash
+./env/bin/python -m unittest
+```
+
+Rebuilding the frontend
+-----
+
+If you need to rebuild the frontend for whatever reason
+
+```bash
+cd frontend
+npm i
+npm run build
+```

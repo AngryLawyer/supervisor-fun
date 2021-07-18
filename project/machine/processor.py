@@ -50,6 +50,7 @@ class ConnectedState(ProcessorState):
 
     This state will report the device's status every 5 seconds
     """
+
     validator = ActionValidation()
 
     def __init__(self, remote, port, socket, device):
@@ -66,14 +67,13 @@ class ConnectedState(ProcessorState):
         message = await self.socket.read_until(b"\n")
         try:
             data = json.loads(message)
-            validator.validate(data)
+            self.validator.validate(data)
             logger.info(f"Received valid message {data}")
             await self.device.add_message(data)
         except json.JSONDecodeError as e:
             logger.warn(f"Got malformed message {message} from Supervisor - {e}")
         except ValidationException as e:
             logger.warn(f"Message {message} failed to validate - {e}")
-
 
     async def think(self):
         try:

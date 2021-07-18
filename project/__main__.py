@@ -20,23 +20,19 @@ def main():
         "-log",
         "--log",
         default="warning",
-        help=(
-            "Provide logging level. "
-            "Example --log debug', default='warning'"
-        )
+        help=("Provide logging level. Example --log debug', default='warning'"),
     )
-
 
     add_machine_subparser(subparsers)
     add_supervisor_subparser(subparsers)
     args = parser.parse_args()
     levels = {
-        'critical': logging.CRITICAL,
-        'error': logging.ERROR,
-        'warn': logging.WARNING,
-        'warning': logging.WARNING,
-        'info': logging.INFO,
-        'debug': logging.DEBUG
+        "critical": logging.CRITICAL,
+        "error": logging.ERROR,
+        "warn": logging.WARNING,
+        "warning": logging.WARNING,
+        "info": logging.INFO,
+        "debug": logging.DEBUG,
     }
     level = levels.get(args.log.lower())
 

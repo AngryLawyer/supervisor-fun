@@ -8,7 +8,7 @@ class BaseDevice:
 
     def __init__(self, identifier):
         self.identifier = identifier
-        self._template = None
+        self.template = None
         self._messages = Queue()
 
     async def add_message(self, message):
@@ -55,6 +55,6 @@ class BaseDevice:
 
         return {
             "id": self.identifier,
-            "template": self._template,
-            "actions": self._actions(),
+            "template": self.template,
+            "actions": self.actions(),
         }
