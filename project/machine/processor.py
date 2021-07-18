@@ -1,9 +1,11 @@
 import json
+import logging
 from asyncio import wait, create_task, FIRST_COMPLETED
 from tornado import gen
 from tornado.tcpclient import TCPClient
 from tornado.iostream import StreamClosedError
 from concurrent_handler import ConcurrentHandler
+from validation import ValidationException, ActionValidation
 
 
 class ProcessorState:
@@ -12,7 +14,7 @@ class ProcessorState:
     """
 
     def __init__(self, remote, port, socket, device):
-        print(f"ProcessorState {self.__class__.__name__}")
+        logging.info(f"ProcessorState {self.__class__.__name__}")
         self.remote = remote
         self.port = port
         self.socket = socket
@@ -35,7 +37,7 @@ class WaitingForConnectionState(ProcessorState):
             socket = await client.connect(self.remote, self.port)
             return ConnectedState(self.remote, self.port, socket, self.device)
         except (TimeoutError, ConnectionError, StreamClosedError) as e:
-            print(f"Failed to phone home - {e}")
+            logging.info(f"Failed to phone home - {e}")
         await gen.sleep(5)
         return self
 
@@ -46,6 +48,7 @@ class ConnectedState(ProcessorState):
 
     This state will report the device's status every 5 seconds
     """
+    validator = ActionValidation()
 
     def __init__(self, remote, port, socket, device):
         super().__init__(remote, port, socket, device)
@@ -59,15 +62,21 @@ class ConnectedState(ProcessorState):
 
     async def reader(self):
         message = await self.socket.read_until(b"\n")
-        print("OOOH", message)
-        # TODO: Validation
-        await self.device.add_message(json.loads(message))
+        try:
+            data = json.loads(message)
+            validator.validate(data)
+            await self.device.add_message(json.loads(message))
+        except json.JSONDecodeError as e:
+            logger.warn(f"Got malformed message {message} from Supervisor - {e}")
+        except ValidationException as e:
+            logger.warn(f"Message {message} failed to validate - {e}")
+
 
     async def think(self):
         try:
             await self.concurrent.process()
         except Exception as ex:
-            print(f"Disconnecting due to {ex}")
+            logging.info(f"Disconnecting due to {ex}")
             return WaitingForConnectionState(self.remote, self.port, None, self.device)
         return self
 

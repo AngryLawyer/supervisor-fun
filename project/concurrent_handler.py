@@ -27,6 +27,11 @@ class ConcurrentHandler:
         This will resume unfinished tasks, and spin up
         new ones for those that have completed
         """
+
+        # If we've got no tasks, just bail out
+        if len(self._tasks.keys()) == 0:
+            return
+
         (done, pending) = await wait(
             [
                 existing_task

@@ -1,5 +1,3 @@
-* Update Usage
-* Refactor queue handling
+* Validation
 * Unit testing
 * Cleanup
-* Documentation
